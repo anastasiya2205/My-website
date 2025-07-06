@@ -607,7 +607,7 @@
   }
 </script>
 
-  <!-- Contact Section -->
+ <!-- Contact Section -->
 <section id="contact" class="py-20 bg-gray-50">
   <div class="max-w-7xl mx-auto px-4">
     <div class="text-center mb-16">
@@ -621,14 +621,13 @@
         <h3 class="text-xl font-semibold text-gray-800 mb-2">Наш адрес:</h3>
         <p class="text-gray-600 mb-4">г. Ташкент, ул. Юсуф Хос Ходжиба, 72</p>
         <div class="mt-4">
-  <a 
-    href="https://maps.app.goo.gl/bPJXBsMqN1ALNmXa6" 
-    target="_blank" 
-    class="inline-block bg-purple-600 text-white px-6 py-2 rounded-full font-medium hover:bg-purple-700 transition">
-    Открыть на карте
-  </a>
-</div>
-
+          <a
+            href="https://maps.app.goo.gl/bPJXBsMqN1ALNmXa6"
+            target="_blank"
+            class="inline-block bg-purple-600 text-white px-6 py-2 rounded-full font-medium hover:bg-purple-700 transition">
+            Открыть на карте
+          </a>
+        </div>
 
         <h3 class="text-xl font-semibold text-gray-800 mb-2">Телефон:</h3>
         <p class="text-gray-600 mb-4">+998 (33) 235-23-11</p>
@@ -637,40 +636,65 @@
         <p class="text-gray-600 mb-4">info@heavenmusic.uz</p>
 
         <h3 class="text-xl font-semibold text-gray-800 mb-2">Соцсети:</h3>
-      <div class="flex space-x-4 text-purple-600 text-2xl">
-  <a href="https://www.instagram.com/heaven_music_studio?igsh=MTNsbnJ1cm52ZWF3NA==" target="_blank" rel="noopener noreferrer">
-    <i class="fab fa-instagram"></i>
-  </a>
-  <a href="https://t.me/heaven_music_studio" target="_blank" rel="noopener noreferrer">
-    <i class="fab fa-telegram"></i>
-  </a>
-  <a href="https://www.facebook.com/share/16KoKrTwKU/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">
-    <i class="fab fa-facebook"></i>
-  </a>
-</div>
+        <div class="flex space-x-4 text-purple-600 text-2xl">
+          <a href="https://www.instagram.com/heaven_music_studio?igsh=MTNsbnJ1cm52ZWF3NA==" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://t.me/heaven_music_studio" target="_blank"><i class="fab fa-telegram"></i></a>
+          <a href="https://www.facebook.com/share/16KoKrTwKU/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook"></i></a>
+        </div>
       </div>
 
       <div>
-        <form class="bg-white p-6 rounded-lg shadow-md">
+        <form id="contactForm" class="bg-white p-6 rounded-lg shadow-md">
           <div class="mb-4">
             <label class="block text-gray-700 font-medium mb-2">Имя</label>
-            <input type="text" class="w-full border border-gray-300 rounded px-4 py-2" placeholder="Ваше имя">
+            <input id="contactName" type="text" class="w-full border border-gray-300 rounded px-4 py-2" placeholder="Ваше имя" required>
           </div>
           <div class="mb-4">
             <label class="block text-gray-700 font-medium mb-2">Номер телефона</label>
-            <input type="email" class="w-full border border-gray-300 rounded px-4 py-2" placeholder="+998">
+            <input id="contactPhone" type="tel" class="w-full border border-gray-300 rounded px-4 py-2" placeholder="+998" required>
           </div>
           <div class="mb-4">
             <label class="block text-gray-700 font-medium mb-2">Сообщение</label>
-            <textarea rows="4" class="w-full border border-gray-300 rounded px-4 py-2" placeholder="Ваше сообщение..."></textarea>
+            <textarea id="contactMessage" rows="4" class="w-full border border-gray-300 rounded px-4 py-2" placeholder="Ваше сообщение..." required></textarea>
           </div>
-          <button type="submit" class="btn-primary text-white px-6 py-2 rounded-full">Отправить</button>
+          <button type="submit" class="bg-purple-600 hover:bg-purple-700 transition text-white px-6 py-2 rounded-full">Отправить</button>
+          <p id="contactThanks" class="hidden mt-4 text-green-600 font-medium">Спасибо! Мы свяжемся с вами в ближайшее время.</p>
         </form>
       </div>
     </div>
   </div>
 </section>
 
+<script>
+  document.getElementById("contactForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const name = document.getElementById("contactName").value;
+    const phone = document.getElementById("contactPhone").value;
+    const message = document.getElementById("contactMessage").value;
 
+    const telegramMessage = `📩 Новое сообщение с формы:
+Имя: ${name}
+Телефон: ${phone}
+Сообщение: ${message}`;
 
-                                         
+    const token = "7956956896:AAHnLEwntFLrLExrO6K07x_pCePmQ8Rdu3g"; // замени если надо
+    const chat_id = "331427868"; // твой id
+    const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+    try {
+      await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chat_id,
+          text: telegramMessage
+        })
+      });
+      document.getElementById("contactForm").reset();
+      document.getElementById("contactThanks").classList.remove("hidden");
+    } catch (error) {
+      alert("Ошибка отправки. Попробуйте позже.");
+      console.error(error);
+    }
+  });
+</script>
